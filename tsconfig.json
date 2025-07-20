@@ -18,11 +18,11 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "moduleResolution": "node",
-    "esModuleInterop": true,
-    "exclude": [
-      "node_modules",
-      "frontend",
-      "dist"
-    ]
-  }
+    "esModuleInterop": true
+  },
+  "exclude": [
+    "node_modules",
+    "frontend",
+    "dist"
+  ]
 }
