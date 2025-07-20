@@ -1,0 +1,14 @@
+# Ignore local dependencies and build output
+node_modules
+
+# Ignore Docker/dev/tooling files
+.dockerignore
+Dockerfile
+docker-compose.yml
+.env
+
+# Ignore Git and IDE metadata
+.git
+.gitignore
+.vscode
+*.log
