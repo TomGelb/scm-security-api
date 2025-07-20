@@ -4,30 +4,32 @@ import { IScanner } from '../scanner.interface';
 @Injectable()
 export class GitleaksService implements IScanner {
     async scanRepository(localPath: string): Promise<string> {
-        const { spawn } = await import('child_process');
+        // const { spawn } = await import('child_process');
         return new Promise((resolve, reject) => {
-            const gitleaks = spawn('gitleaks', ['detect', '--source', localPath, '--report-format', 'json'], {
-                stdio: ['ignore', 'pipe', 'pipe'],
-            });
+            resolve(`Scanning repository at ${localPath} using Gitleaks...`);
+            // const gitleaks = spawn('gitleaks', ['detect', '--source', localPath, '--report-format', 'json'], {
+            //     stdio: ['ignore', 'pipe', 'pipe'],
+            //     shell: false
+            // });
 
-            let output = '';
-            let errorOutput = '';
+            // let output = '';
+            // let errorOutput = '';
 
-            gitleaks.stdout.on('data', (data) => {
-                output += data.toString();
-            });
+            // gitleaks.stdout.on('data', (data) => {
+            //     output += data.toString();
+            // });
 
-            gitleaks.stderr.on('data', (data) => {
-                errorOutput += data.toString();
-            });
+            // gitleaks.stderr.on('data', (data) => {
+            //     errorOutput += data.toString();
+            // });
 
-            gitleaks.on('close', (code) => {
-                if (code === 0) {
-                    resolve(output);
-                } else {
-                    reject(new Error(`Gitleaks scan failed with code ${code}: ${errorOutput}`));
-                }
-            });
+            // gitleaks.on('close', (code) => {
+            //     if (code === 0) {
+            //         resolve(output);
+            //     } else {
+            //         reject(new Error(`Gitleaks scan failed with code ${code}: ${errorOutput}`));
+            //     }
+            // });
         });
     }
 }
