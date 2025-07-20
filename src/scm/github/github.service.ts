@@ -2,12 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
 import { IScm } from '../scm.interface';
+import { GithubRepoInfo } from './github-repo-info.interface';
 
 @Injectable()
 export class GithubService implements IScm {
     constructor(private readonly httpService: HttpService) {}
 
-    async getRepositoryInfo(url: string): Promise<any> {
+    async getRepositoryInfo(url: string): Promise<GithubRepoInfo> {
         // Extract owner and repo from the URL
         const match = url.match(/github.com[/:]([^/]+)\/([^/.]+)(.git)?/);
         if (!match) throw new Error('Invalid GitHub URL');
@@ -19,7 +20,11 @@ export class GithubService implements IScm {
                     headers: { 'User-Agent': 'scm-security-api' },
                 })
             );
-            return response.data;
+        return {
+            name: response.data.name,
+            description: response.data.description,
+            default_branch: response.data.default_branch,
+        };
         } catch (error: any) {
             throw new Error(`GitHub API error: ${error.response?.status || error.message}`);
         }
