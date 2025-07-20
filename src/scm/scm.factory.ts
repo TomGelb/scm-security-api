@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { IScm } from './scm.interface';
 import { GithubService } from './github/github.service';
 // import { GitLabScmService } from './gitlab/gitlab.scm';
@@ -14,6 +14,6 @@ export class ScmFactoryService {
     if (url.includes('github.com')) return this.githubScm;
     // if (url.includes('gitlab.com')) return this.gitLabScm;
 
-    throw new Error('Unsupported SCM provider');
+    throw new BadRequestException('Unsupported SCM provider');
   }
 }
