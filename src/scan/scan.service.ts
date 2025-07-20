@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { IScanner } from '../scanner/scanner.interface';
 import { ScmFactoryService } from '../scm/scm.factory';
 import { IScm } from '../scm/scm.interface';
@@ -11,6 +11,7 @@ export class ScanService {
     ) {}
     
     async scanRepository(url: string): Promise<string> {
+        try {
         const scm: IScm = this.scmFactory.resolve(url);
         const repoInfo = await scm.getRepositoryInfo(url);
         const localPath = await scm.cloneRepository(url);
@@ -20,5 +21,8 @@ export class ScanService {
             repoInfo,
             scanResult
         });
+        } catch (error) {
+            throw new InternalServerErrorException(`Failed to scan repository: ${error.message}`);
+        }
     }
 }
