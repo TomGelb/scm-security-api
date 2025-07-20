@@ -31,11 +31,12 @@ export class GithubService implements IScm {
     }
 
     async cloneRepository(url: string): Promise<string> {
-        const { mkdtemp } = await import('fs/promises');
-        const { tmpdir } = await import('os');
+        const { mkdtemp, mkdir } = await import('fs/promises');
         const { join } = await import('path');
         const { spawn } = await import('child_process');
-        const tmp = await mkdtemp(join(tmpdir(), 'repo-'));
+        const reposDir = join(process.cwd(), 'repos');
+        await mkdir(reposDir, { recursive: true });
+        const tmp = await mkdtemp(join(reposDir, 'repo-'));
         return new Promise((resolve, reject) => {
             const git = spawn('git', ['clone', url, tmp], { stdio: ['ignore', 'pipe', 'pipe'] });
             let errorOutput = '';
