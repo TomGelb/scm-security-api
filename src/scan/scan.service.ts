@@ -16,6 +16,7 @@ export class ScanService {
         const localPath = await scm.cloneRepository(url);
         const scanResult = await this.scanner.scanRepository(localPath);
         return JSON.stringify({
+            Scanner: this.scanner.constructor.name.replace('Service', ''),
             repoInfo,
             scanResult
         });
