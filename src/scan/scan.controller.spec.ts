@@ -22,15 +22,15 @@ describe('ScanController', () => {
   });
 
   it('should return scan result for valid request', async () => {
-    scanService.scanRepository.mockResolvedValue('scan-result');
+    scanService.analyzeRepository.mockResolvedValue('scan-result');
     const dto = { url: 'https://github.com/user/repo' };
     const result = await controller.scanRepository(dto as any);
     expect(result).toBe('scan-result');
-    expect(scanService.scanRepository).toHaveBeenCalledWith(dto.url);
+    expect(scanService.analyzeRepository).toHaveBeenCalledWith(dto.url);
   });
 
   it('should propagate errors from scanService', async () => {
-    scanService.scanRepository.mockRejectedValue(new Error('scan error'));
+    scanService.analyzeRepository.mockRejectedValue(new Error('scan error'));
     const dto = { url: 'https://github.com/user/repo' };
     await expect(controller.scanRepository(dto as any)).rejects.toThrow('scan error');
   });

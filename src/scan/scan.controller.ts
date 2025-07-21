@@ -10,7 +10,8 @@ export class ScanController {
     @HttpCode(HttpStatus.OK)
     @UsePipes(new ValidationPipe())
     async scanRepository(@Body() scanRepoDto: ScanRepoDto): Promise<string> {
-        const scanResult = await this.scanService.scanRepository(scanRepoDto.url);
+        const scanResult = await this.scanService.analyzeRepository(scanRepoDto.url);
+        console.log(scanResult);
         return scanResult;
     }
 }

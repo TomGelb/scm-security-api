@@ -50,7 +50,7 @@ function App() {
           Gitleaks
         </button>
       </div>
-      {loading && <div className="loading-bar">Loading...</div>}
+      {loading && <div className="loading-bar">Scanning...</div>}
       {error && <div className="error-msg">{error}</div>}
       {result && (
         <pre className="result-display">{result}</pre>
