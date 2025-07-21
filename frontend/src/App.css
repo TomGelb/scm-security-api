@@ -128,3 +128,14 @@
   overflow-y: auto;
   border: 1px solid #e5e7eb;
 }
+
+.custom-logo {
+  display: block;
+  margin: 0 auto 16px auto;
+  max-width: 220px;
+  max-height: 220px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  z-index: 1;
+}

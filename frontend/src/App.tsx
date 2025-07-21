@@ -37,6 +37,7 @@ function App() {
 
   return (
     <div className="app-container">
+      <img src={process.env.PUBLIC_URL + '/stevejobsouija.jpg'} alt="Ghost Steve Jobs Ouija Logo" className="custom-logo" />
       <header className="project-label">{PROJECT_NAME}</header>
       <div className="input-section">
         <input

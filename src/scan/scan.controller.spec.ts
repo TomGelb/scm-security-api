@@ -7,7 +7,7 @@ describe('ScanController', () => {
   let scanService: jest.Mocked<ScanService>;
 
   beforeEach(async () => {
-    scanService = { scanRepository: jest.fn() } as any;
+    scanService = { analyzeRepository: jest.fn() } as any;
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ScanController],
       providers: [
