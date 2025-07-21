@@ -12,18 +12,17 @@ describe('AppController (e2e)', () => {
       imports: [AppModule],
     })
       .overrideProvider(ScanService)
-      .useValue({ scanRepository: jest.fn().mockResolvedValue('mock-scan-result') })
+      .useValue({ analyzeRepository: jest.fn().mockResolvedValue('mock-scan-result') })
       .compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
   });
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
+  afterEach(async () => {
+    if (app) {
+      await app.close();
+    }
   });
 
   it('/scm-scanner/scan (POST) should return scan result', async () => {

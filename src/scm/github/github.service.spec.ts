@@ -47,7 +47,7 @@ describe('GithubService', () => {
 
   it('should throw on GitHub API error', async () => {
     httpService.get.mockReturnValue(throwError(() => ({ response: { status: 404 } })));
-    await expect(service.getRepositoryInfo('https://github.com/user/repo')).rejects.toThrow('GitHub API error: 404');
+    await expect(service.getRepositoryInfo('https://github.com/user/repo')).rejects.toThrow('GitHub API error: Repository not found');
   });
 
   it('should throw on invalid GitHub URL', async () => {

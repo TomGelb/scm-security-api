@@ -20,6 +20,7 @@ describe('ScanService', () => {
       getRepositoryInfo: jest.fn(),
       cloneRepository: jest.fn(),
     } as any;
+    scm.constructor = MockedObjectService;
     scmFactory = { resolve: jest.fn() } as any;
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -42,6 +43,7 @@ describe('ScanService', () => {
     scanner.scanRepository.mockResolvedValue('{"findings":[]}');
     const result = await service.analyzeRepository('https://github.com/user/repo');
     expect(JSON.parse(result)).toEqual({
+      SCM: 'MockedObject',
       Scanner: 'MockedObject',
       repoInfo: { name: 'repo', description: 'desc', default_branch: 'main' },
       scanResult: '{"findings":[]}'
