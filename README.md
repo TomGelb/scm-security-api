@@ -38,15 +38,16 @@ SCM Security API is a full-stack application for scanning source code repositori
 ## API Documentation
 
 ### Scan a Repository
-- **POST** `/scan`
-  - **Body:** `{ "repoUrl": "<repository-url>" }`
+  - **POST** `/api/scm-scanner/scan`
+  - **Body:** `{ "url": "<repository-url>" }`
+
   - **Response:** Scan results (JSON)
 
 ### Example Request
 ```bash
-curl -X POST http://localhost:3000/scan \
+curl -X POST http://localhost:3000/api/scm-scanner/scan \
   -H "Content-Type: application/json" \
-  -d '{"repoUrl": "https://github.com/example/repo.git"}'
+  -d '{"url": "https://github.com/example/repo.git"}'
 ```
 
 ## Design Decisions & Trade-offs
