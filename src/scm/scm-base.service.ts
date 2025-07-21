@@ -1,5 +1,4 @@
-import { HttpException, Injectable, InternalServerErrorException, UnprocessableEntityException } from '@nestjs/common';
-import { lastValueFrom } from 'rxjs';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { IScm } from './scm.interface';
 
 @Injectable()
