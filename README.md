@@ -9,6 +9,9 @@ SCM Security API is a full-stack application for scanning source code repositori
 ### Prerequisites
 - [Docker](https://www.docker.com/get-started)
 - [Docker Compose](https://docs.docker.com/compose/)
+- [Node.js 20](https://nodejs.org/) (for local development)
+- [git](https://git-scm.com/) (required for backend scans)
+- [Gitleaks](https://github.com/gitleaks/gitleaks) (required for backend scans in local development)
 
 ### Quick Start
 1. Clone the repository:
@@ -28,6 +31,12 @@ SCM Security API is a full-stack application for scanning source code repositori
   npm install
   npm run start:dev
   ```
+  > **Note:**
+  > - Ensure you are using Node.js 20 for compatibility.
+  > - `git` must be installed and available in your PATH.
+  > - [Gitleaks](https://github.com/gitleaks/gitleaks) must be installed and available in your PATH for security scanning to work. You can install it by following the instructions on the [Gitleaks releases page](https://github.com/gitleaks/gitleaks/releases).
+  > - The `repos` directory should exist in the project root and be writable. If it does not exist, create it with `mkdir repos`.
+
 - Frontend:
   ```bash
   cd frontend

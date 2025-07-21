@@ -1,12 +1,14 @@
-import { HttpException, Injectable, InternalServerErrorException, UnprocessableEntityException } from '@nestjs/common';
+import { HttpException, Injectable, InternalServerErrorException, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
-import { IScm } from '../scm.interface';
 import { GithubRepoInfo } from './github-repo-info.interface';
+import { ScmBaseService } from '../scm-base.service';
 
 @Injectable()
-export class GithubService implements IScm {
-    constructor(private readonly httpService: HttpService) {}
+export class GithubService extends ScmBaseService {
+    constructor(private readonly httpService: HttpService) {
+        super();
+    }
 
     async getRepositoryInfo(url: string): Promise<GithubRepoInfo> {
         // Extract owner and repo from the URL
@@ -29,26 +31,10 @@ export class GithubService implements IScm {
             if (error instanceof HttpException) {
                 throw error;
             }
+            if (error.response?.status === 404) {
+                throw new NotFoundException('GitHub API error: Repository not found');
+            }
             throw new InternalServerErrorException(`GitHub API error: ${error.response?.status || error.message}`);
         }
-    }
-
-    // cloning a repository is the same process for all SCMs, so theoretically this could be implemented in a shared base class
-    async cloneRepository(url: string): Promise<string> {
-        const { mkdtemp, mkdir } = await import('fs/promises');
-        const { join } = await import('path');
-        const { spawn } = await import('child_process');
-        const reposDir = join(process.cwd(), 'repos');
-        await mkdir(reposDir, { recursive: true });
-        const tmp = await mkdtemp(join(reposDir, 'repo-'));
-        return new Promise((resolve, reject) => {
-            const git = spawn('git', ['clone', url, tmp], { stdio: ['ignore', 'pipe', 'pipe'] });
-            let errorOutput = '';
-            git.stderr.on('data', (data) => { errorOutput += data.toString(); });
-            git.on('close', (code) => {
-                if (code === 0) resolve(tmp);
-                else reject(new InternalServerErrorException(`Git clone failed: ${errorOutput}`));
-            });
-        });
     }
 }

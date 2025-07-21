@@ -24,7 +24,8 @@ function App() {
         body: JSON.stringify({ url: scmUrl }),
       });
       if (!response.ok) {
-        throw new Error('API request failed');
+        const errorText = `${response?.status} ${response?.statusText}`;
+        throw new Error(errorText ?? `API request failed` );
       }
       const data = await response.json();
       setResult(JSON.stringify(data, null, 2));

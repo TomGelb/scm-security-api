@@ -94,6 +94,7 @@
 
 .loading-bar {
   margin: 0 auto 20px auto;
+  padding: 20px;
   width: 80%;
   height: 8px;
   background: linear-gradient(90deg, #2563eb 40%, #60a5fa 100%);
@@ -138,4 +139,5 @@
   height: auto;
   object-fit: contain;
   z-index: 1;
+  border-radius: 50%;
 }

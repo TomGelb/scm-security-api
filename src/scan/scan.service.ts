@@ -15,10 +15,11 @@ export class ScanService {
     async analyzeRepository(url: string): Promise<string> {
         let clonedRepoPath: string | undefined = undefined;
         try {
-            const { localPath, repoInfo } = await this.cloneRepository(url);
+            const { localPath, scmType, repoInfo } = await this.cloneRepository(url);
             clonedRepoPath = localPath;
             const scanResult = await this.scanner.scanRepository(localPath);
             return JSON.stringify({
+                SCM: scmType,
                 Scanner: this.scanner.constructor.name.replace('Service', ''),
                 repoInfo,
                 scanResult
@@ -35,11 +36,12 @@ export class ScanService {
         }
     }
 
-    async cloneRepository(url: string): Promise<{localPath: string, repoInfo: any}> {
+    async cloneRepository(url: string): Promise<{localPath: string, scmType: string, repoInfo: any}> {
         const scm: IScm = this.scmFactory.resolve(url);
+        const scmType = scm.constructor.name.replace('Service', '');
         const repoInfo = await scm.getRepositoryInfo(url);
         const localPath = await scm.cloneRepository(url);
-        return { localPath, repoInfo };
+        return { localPath, scmType ,repoInfo };
     }
 
     async cleanup(localPath: string): Promise<void> {
