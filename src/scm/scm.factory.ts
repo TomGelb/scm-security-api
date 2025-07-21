@@ -12,8 +12,9 @@ export class ScmFactoryService {
 
   resolve(url: string): IScm {
     if (url.includes('github.com')) return this.githubScm;
-    // if (url.includes('gitlab.com')) return this.gitLabScm;
-
-    throw new BadRequestException('Unsupported SCM provider');
+    if (url.includes('gitlab.com') || url.includes('bitbucket.com')) //return this.gitLabScm;
+      throw new BadRequestException('GitLab SCM is not supported yet');
+    console.warn(`No SCM implementation found for URL: ${url}, returning GitHub as default`);
+    return this.githubScm; // this is not a good practice in this case because the resolution is based on URL. I wanted to see how other exceptions propogate later
   }
 }

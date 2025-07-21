@@ -40,7 +40,7 @@ describe('ScanService', () => {
     scm.getRepositoryInfo.mockResolvedValue({ name: 'repo', description: 'desc', default_branch: 'main' });
     scm.cloneRepository.mockResolvedValue('/tmp/repo');
     scanner.scanRepository.mockResolvedValue('{"findings":[]}');
-    const result = await service.scanRepository('https://github.com/user/repo');
+    const result = await service.analyzeRepository('https://github.com/user/repo');
     expect(JSON.parse(result)).toEqual({
       Scanner: 'MockedObject',
       repoInfo: { name: 'repo', description: 'desc', default_branch: 'main' },
@@ -50,7 +50,7 @@ describe('ScanService', () => {
 
   it('should throw if SCM is not supported', async () => {
     scmFactory.resolve.mockImplementation(() => { throw new Error('Unsupported SCM provider'); });
-    await expect(service.scanRepository('https://unknown.com/repo')).rejects.toThrow('Unsupported SCM provider');
+    await expect(service.analyzeRepository('https://unknown.com/repo')).rejects.toThrow('Unsupported SCM provider');
   });
 
   it('should throw if scanner fails', async () => {
@@ -58,6 +58,6 @@ describe('ScanService', () => {
     scm.getRepositoryInfo.mockResolvedValue({ name: 'repo', description: 'desc', default_branch: 'main' });
     scm.cloneRepository.mockResolvedValue('/tmp/repo');
     scanner.scanRepository.mockRejectedValue(new Error('scan error'));
-    await expect(service.scanRepository('https://github.com/user/repo')).rejects.toThrow('scan error');
+    await expect(service.analyzeRepository('https://github.com/user/repo')).rejects.toThrow('scan error');
   });
 });
