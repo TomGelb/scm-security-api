@@ -3,10 +3,6 @@ import { IScm } from './scm.interface';
 
 @Injectable()
 export abstract class ScmBaseService implements IScm {
-
-    getRepositoryInfo(url: string): Promise<any> {
-        throw new Error('Method not implemented in base class.');
-    }
     
     async cloneRepository(url: string): Promise<string> {
         const { mkdtemp, mkdir } = await import('fs/promises');
@@ -24,5 +20,13 @@ export abstract class ScmBaseService implements IScm {
                 else reject(new InternalServerErrorException(`Git clone failed: ${errorOutput}`));
             });
         });
+    }
+
+    getRepositoryInfo(url: string): Promise<any> {
+        throw new Error('Method not implemented in base class.');
+    }
+
+    getLashCommitHash(url: string): Promise<string> {
+        throw new Error('Method not implemented in base class.');
     }
 }
