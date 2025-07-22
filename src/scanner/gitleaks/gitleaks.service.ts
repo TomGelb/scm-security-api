@@ -5,17 +5,25 @@ import * as path from 'path';
 
 @Injectable()
 export class GitleaksService implements IScanner {
+    private static readonly fileNamePostfix = '_results.json';
+
     async scanRepository(localPath: string): Promise<string> {
+        if (await this.fileExists(`${localPath}${GitleaksService.fileNamePostfix}`)) {
+            try {
+                    const findings = await this.readResults(`${localPath}`);
+                    console.log(`Found existing scan results for ${localPath} in local cache.`);
+                    return findings;
+                } catch (err) {
+                    console.error('Failed to parse existing JSON scan results from Gitleaks:', err.message);
+                }
+        }
         const { spawn } = await import('child_process');
         return new Promise((resolve, reject) => {
             console.log(`Scanning repository at ${localPath} using Gitleaks...`);
-            // const gitleaks = spawn('gitleaks', ['git', localPath, '--report-format=json'], {
-            //     shell: false
-            // });
             const gitleaks = spawn('gitleaks', [
                 'git',
                 localPath,
-                `--report-path=${localPath}_results.json`,
+                `--report-path=${localPath}${GitleaksService.fileNamePostfix}`,
                 '--report-format=json',
                 '--no-banner'  // hides the ASCII logo
             ]);
@@ -35,8 +43,7 @@ export class GitleaksService implements IScanner {
                 if (code === 0 || code === 1) {
                     console.log(`Gitleaks process found: ${output}`);
                     try {
-                        const raw = await fs.readFile(`${localPath}_results.json`, 'utf-8');
-                        const findings = JSON.parse(raw);
+                        const findings = this.readResults(localPath);
                         resolve(findings);
                     } catch (err) {
                         console.error('Failed to parse JSON from Gitleaks:', err.message);
@@ -47,5 +54,20 @@ export class GitleaksService implements IScanner {
                 }
             });
         });
+    }
+
+    async fileExists(path: string): Promise<boolean> {
+        try {
+            await fs.access(path);
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
+    async readResults(localPath: string): Promise<string> {
+        const raw = await fs.readFile(`${localPath}${GitleaksService.fileNamePostfix}`, 'utf-8');
+        const findings = JSON.parse(raw);
+        return findings;
     }
 }
