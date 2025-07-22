@@ -55,7 +55,7 @@ export class ScanService {
         localPath = await scm.cloneRepository(url);
         ScanService.scannedReposCommitHash.set(lastCommitHash, localPath);
         console.log(`Cloned repository from ${url} to ${localPath}`);
-        return { localPath, scmType ,repoInfo };
+        return { localPath, scmType ,repoInfo, lastCommitHash };
     }
 
     async cleanup(localPath: string): Promise<void> {
