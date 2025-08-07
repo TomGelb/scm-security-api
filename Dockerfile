@@ -47,8 +47,14 @@ RUN npm install --omit=dev
 # Copy backend build output
 COPY --from=backend-build /app/dist ./dist
 
-# Copy other necessary backend files
-COPY --from=backend-build /app/repos ./repos
+# Try to copy repos directory, create it if it doesn't exist
+RUN if [ -d "/app/repos" ]; then \
+        echo "Copying existing repos directory"; \
+        cp -r /app/repos ./repos; \
+    else \
+        echo "Creating repos directory"; \
+        mkdir -p ./repos; \
+    fi
 
 # Copy frontend build output if the backend serves it
 COPY --from=frontend-build /app/frontend/build ./frontend/build
